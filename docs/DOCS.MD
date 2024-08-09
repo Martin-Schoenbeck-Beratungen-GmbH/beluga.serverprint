@@ -67,7 +67,7 @@ This is given to the process to determine variants.
 A pattern accepting @\<placeholder\>@.  
 This pattern also allows a special @$\<placeholder\>@ variant, where \<placeholder\> is replaced by the field with the same name in the record being processed.
 #### Copy Type
-???
+If possible, Beluga Serverprint will execute one copy per copy type.
 #### Print Option
 When copies with multiple print options are valid, the executing user chooses one of them. Only copies of that or no print option are executed.  
 When copies with multiple print options are valid, but those print options are "process only", the user will not be prompted.
@@ -81,7 +81,7 @@ The print configuration to be used. If this is empty, nothing will be printed.
 #### Copies
 The amount of copies to be printed.
 #### Send mail to User/Contact
-????
+Whether to send the mail to the business contact within the document.
 #### senddirectly
 Send mail immediately and silently, without opening a dialog for the currently logged in user.
 #### mail to fixed address
@@ -146,7 +146,7 @@ A value that is allowed for a given attribute.
 
 ---
 ## Menu: Copy Type
-???
+All fields here serve only as identifiers.
 
 ---
 ## Menu: Print Option

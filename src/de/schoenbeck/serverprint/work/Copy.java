@@ -176,20 +176,27 @@ public class Copy {
 	public static File prepareReport (ServerPrintCopyParam p) {
 
 		try {
-			if (p.toArchive && p.useFromArchive) {
+			if (p.useFromArchive) {
+				String fileName = p.reportVariant == "" || p.reportVariant == null 
+						? "%#." + p.exportFileExtension
+						: "%." + p.reportVariant + "." + p.exportFileExtension;
+				
 				final String sql = "ad_client_id = ? "
 							+ "AND ad_table_id = ? "
 							+ "AND record_id = ? "
 							+ "AND name LIKE ? ";
 				
 				MArchive doc = new Query(Env.getCtx(), MArchive.Table_Name, sql, null)
-						.setParameters(p.ad_client_id, p.ad_table_id, p.record_id, "%." + p.exportFileExtension)
-						.setOrderBy(MArchive.COLUMNNAME_Created)
+						.setParameters(p.ad_client_id, p.ad_table_id, p.record_id, fileName)
+						.setOrderBy(MArchive.COLUMNNAME_Created + " desc")
 						.first();
 				
 				if (doc != null) {
+					doc.setName(doc.getName().replace("#" + "." + p.exportFileExtension, "." + p.exportFileExtension));
+					doc.setName(doc.getName().replace("." + p.reportVariant + "." + p.exportFileExtension, "." + p.exportFileExtension));
 					String path = System.getProperty("java.io.tmpdir") + File.separator + doc.getName();
 					File rtn = new File(path);
+					//FIXME
 					rtn.delete();
 					try (FileOutputStream outputStream = new FileOutputStream(rtn)) {
 					    outputStream.write(doc.getBinaryData());
@@ -266,23 +273,24 @@ public class Copy {
 				rtn = rtn.replaceFirst(Matcher.quoteReplacement(replacements.group(0)), record.get_Value(index).toString());
 		}
 		
-		rtn = Env.parseContext(Env.getCtx(), p.windowno, rtn, false, true);
 		
-		return rtn;
+		return Env.parseContext(Env.getCtx(), p.windowno, rtn, false, true);
 	}
 	
 	private static void archive (ServerPrintCopyParam p, File printedDoc) throws IOException {
+		
+		String fileName = p.reportVariant == "" || p.reportVariant == null 
+						? "%#." + p.exportFileExtension
+						: "%." + p.reportVariant + "." + p.exportFileExtension;
 		
 		// don't archive a doc we have taken from the archive!
 		final String sql = "ad_client_id = ? "
 				+ "AND ad_table_id = ? "
 				+ "AND record_id = ? "
 				+ "AND name LIKE ? ";
-		if (p.toArchive
-				&& p.useFromArchive
+		if (p.useFromArchive
 				&& new Query(Env.getCtx(), MArchive.Table_Name, sql, null)
-				.setParameters(p.ad_client_id, p.ad_table_id, p.record_id, "%." + p.exportFileExtension)
-				.setOrderBy(MArchive.COLUMNNAME_Created)
+				.setParameters(p.ad_client_id, p.ad_table_id, p.record_id, fileName)
 				.match()
 				)
 			return;
@@ -299,8 +307,12 @@ public class Copy {
 			}
 		}
 		byte[] data = bas.toByteArray();  
-				
-		PrintInfo pinfo = new PrintInfo (printedDoc.getName(), p.ad_table_id, p.record_id, p.c_bpartner_id);
+		
+		String printedDocName = p.reportVariant == "" || p.reportVariant == null 
+								? printedDoc.getName().replace("." + p.exportFileExtension, "#" + "." + p.exportFileExtension)
+		                 		: printedDoc.getName().replace("." + p.exportFileExtension, "." + p.reportVariant + "." + p.exportFileExtension);
+		
+		PrintInfo pinfo = new PrintInfo (printedDocName, p.ad_table_id, p.record_id, p.c_bpartner_id);
 		MArchive archive = new MArchive (Env.getCtx(), pinfo, p.trxname);
 		archive.setBinaryData(data);
 		archive.saveEx();
@@ -493,8 +505,8 @@ public class Copy {
 			if (!attachments.equals(null) && attachments.length > 0)
 				for (MAttachmentEntry entry : attachments)
 					for (String prefix : p.mailAttPrefix)
-						if (entry.getName().startsWith(prefix))
-							rtn.add(entry.getFile());			
+						if (entry.getName().startsWith(prefix)) 
+							rtn.add(entry.getFile());		
 			
 		} catch (NullPointerException | IndexOutOfBoundsException e) {}
 		

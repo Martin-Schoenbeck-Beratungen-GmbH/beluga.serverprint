@@ -10,6 +10,7 @@ import org.compiere.util.CLogger;
 import org.compiere.util.Env;
 import org.compiere.util.Msg;
 
+import de.schoenbeck.serverprint.exceptions.DocumentIsNewException;
 import de.schoenbeck.serverprint.params.ServerPrintWorkerParam;
 import de.schoenbeck.serverprint.params.ServerPrintWorkerParamBuilder;
 import de.schoenbeck.serverprint.work.ServerPrintWorker;

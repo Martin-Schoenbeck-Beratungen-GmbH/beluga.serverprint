@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: beluga.serverprint
 Bundle-SymbolicName: beluga.serverprint
-Bundle-Version: 5.5.0.qualifier
+Bundle-Version: 5.5.1.qualifier
 Service-Component: OSGI-INF/*.xml
 Bundle-RequiredExecutionEnvironment: JavaSE-17
 Require-Bundle: org.adempiere.base;bundle-version="5.1.0",

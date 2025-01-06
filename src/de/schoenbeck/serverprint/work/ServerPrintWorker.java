@@ -24,6 +24,8 @@ import org.compiere.model.GridField;
 import org.compiere.model.GridFieldVO;
 import org.compiere.model.MLookup;
 import org.compiere.model.MLookupFactory;
+import org.compiere.model.MTable;
+import org.compiere.model.PO;
 import org.compiere.util.CLogger;
 import org.compiere.util.DB;
 import org.compiere.util.DisplayType;
@@ -31,6 +33,7 @@ import org.compiere.util.Env;
 import org.compiere.util.Msg;
 
 import de.schoenbeck.serverprint.exceptions.CalledFromProcessException;
+import de.schoenbeck.serverprint.exceptions.DocumentIsNewException;
 import de.schoenbeck.serverprint.exceptions.NoPrintProfileException;
 import de.schoenbeck.serverprint.exceptions.NotPreparedException;
 import de.schoenbeck.serverprint.params.ServerPrintCopyParam;
@@ -87,6 +90,11 @@ public class ServerPrintWorker {
 		if (!isPrepared)
 			throw new NotPreparedException();
 		
+		PO doc = new MTable(Env.getCtx(), params[0].ad_table_id, trxName).getPO(params[0].record_id, trxName);
+		if (doc.columnExists("DocStatus")) {
+			if (doc.get_Value("DocStatus").equals("DR")) throw new DocumentIsNewException();
+		}
+	
 //		Stack<Object> deletionStack = null; //FIXME: braucht neuen Cleaner
 		
 		LinkedList<Copy> copies = new LinkedList<>();

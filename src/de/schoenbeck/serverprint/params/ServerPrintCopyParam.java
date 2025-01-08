@@ -83,20 +83,10 @@ public class ServerPrintCopyParam {
 		this.processParams = b.processParams;
 	}
 
-
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + Arrays.hashCode(mailAttPrefix);
-		result = prime * result + Objects.hash(actualuserasfrom, ad_client_id, ad_org_id, ad_process_id, ad_table_id,
-				ad_user_id, ad_user_id_bpartner, c_bpartner_id, c_doctype_id, copies, depositPath, eMailCc, eMailTo,
-				exportFileExtension, exportFilenamePattern, from_ad_user_id, isCalledFromProcess, mailtoaddress,
-				mailtouser, r_mailtext_id, record_id, reportVariant, sbsp_printconfig_id, senddirectly, toArchive,
-				trxname, windowno);
-		return result;
+		return Objects.hash(ad_process_id, ad_table_id, exportFileExtension, record_id, reportVariant, useFromArchive);
 	}
-
 
 	@Override
 	public boolean equals(Object obj) {
@@ -107,20 +97,9 @@ public class ServerPrintCopyParam {
 		if (getClass() != obj.getClass())
 			return false;
 		ServerPrintCopyParam other = (ServerPrintCopyParam) obj;
-		return actualuserasfrom == other.actualuserasfrom && ad_client_id == other.ad_client_id
-				&& ad_org_id == other.ad_org_id && ad_process_id == other.ad_process_id
-				&& ad_table_id == other.ad_table_id && ad_user_id == other.ad_user_id
-				&& ad_user_id_bpartner == other.ad_user_id_bpartner && c_bpartner_id == other.c_bpartner_id
-				&& c_doctype_id == other.c_doctype_id && copies == other.copies
-				&& Objects.equals(depositPath, other.depositPath) && Objects.equals(eMailCc, other.eMailCc)
-				&& Objects.equals(eMailTo, other.eMailTo)
-				&& Objects.equals(exportFileExtension, other.exportFileExtension)
-				&& Objects.equals(exportFilenamePattern, other.exportFilenamePattern)
-				&& from_ad_user_id == other.from_ad_user_id && isCalledFromProcess == other.isCalledFromProcess
-				&& Arrays.equals(mailAttPrefix, other.mailAttPrefix) && mailtoaddress == other.mailtoaddress
-				&& mailtouser == other.mailtouser && r_mailtext_id == other.r_mailtext_id
-				&& record_id == other.record_id && Objects.equals(reportVariant, other.reportVariant)
-				&& sbsp_printconfig_id == other.sbsp_printconfig_id && senddirectly == other.senddirectly
-				&& toArchive == other.toArchive && Objects.equals(trxname, other.trxname) && windowno == other.windowno;
+		return ad_process_id == other.ad_process_id && ad_table_id == other.ad_table_id
+				&& Objects.equals(exportFileExtension, other.exportFileExtension) && record_id == other.record_id
+				&& Objects.equals(reportVariant, other.reportVariant) && useFromArchive == other.useFromArchive;
 	}
+
 }

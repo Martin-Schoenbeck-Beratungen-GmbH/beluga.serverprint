@@ -7,10 +7,12 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.CopyOption;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.nio.file.attribute.FileAttribute;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -135,7 +137,7 @@ public class Copy {
 		 + "						and (po.islimitedtoprocess = 'N' "
 		 + "							or po.islimitedtoprocess = params.calledfromprocess)"
 		 + "						AND po.isactive = 'Y'))"
-		 + "      order by cp.sbsp_copytype_id, cp.reportvariant";
+		 + "      order by cp.sbsp_copytype_id, cp.reportvariant, cp.exportfilenamepattern";
 	
 	
 	private ServerPrintCopyParam[] copyParams;
@@ -173,7 +175,7 @@ public class Copy {
 		}
 	}
 	
-	public static File prepareReport (ServerPrintCopyParam p) {
+	public static File prepareReport (ServerPrintCopyParam p) throws Exception {
 
 		try {
 			if (p.useFromArchive) {
@@ -246,11 +248,14 @@ public class Copy {
 		if (title == null)
 			return export;
 		
-		File rtn = new File(
+		Path target = Files.createTempDirectory("beluga.Serverprint", new FileAttribute[] {} );
+		
+		File rtn = new File(target.toFile(),
 				title + 
-				(p.exportFilenamePattern.equals("") ? java.lang.Math.abs(new java.util.Random().nextInt(1000000)) : "") + //add a random number to temporary files
 				"." + (p.exportFileExtension.startsWith(".") ? p.exportFileExtension.substring(1) : p.exportFileExtension));
-		export.renameTo(rtn);
+		Files.move(export.toPath(), rtn.toPath(), new CopyOption[] {});
+		
+		rtn.deleteOnExit();
 		return rtn;
 	}
 	

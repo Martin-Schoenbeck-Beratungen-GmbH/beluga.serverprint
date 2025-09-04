@@ -402,6 +402,8 @@ public class Copy {
 	
 	private static void saveFile (ServerPrintCopyParam p, File printedDoc) throws Exception {
 		
+		//FIXME: only interpret as directory
+		//FIXME: mention in wiki: "Since version X.X.X: deposit path will no longer be interpreted as file name prefix, only ever as directory"
 		Path target;
 		if (p.depositPath.endsWith("/"))
     		target = Paths.get(p.depositPath, printedDoc.getName());
@@ -426,11 +428,13 @@ public class Copy {
 			 + "	(SELECT ? ad_client_id, "
 			 + "	        ? ad_org_id, "
 			 + "            ? sbsp_printconfig_id, "
-			 + "            cast (? as numeric) ad_user_id) "
+			 + "            cast (? as numeric) ad_user_id,"
+			 + "			? session_id) "
 			 + "SELECT printer.sbsp_printer_id printer, printer.sbsp_printerprovider_id provider, pce.sbsp_printerconfig_id config "
 			 + "FROM sbsp_printconfig pc, "
 			 + "     sbsp_printconfig_entry pce, "
 			 + "     sbsp_printer printer, "
+			 + "	 ad_session ses, "
 			 + "     params "
 			 + "WHERE pc.sbsp_printconfig_id = params.sbsp_printconfig_id "
 			 + "	AND pc.isactive = 'Y' "
@@ -440,7 +444,9 @@ public class Copy {
 			 + "	AND (pce.ad_user_id = params.ad_user_id or pce.isstandardprintconfig = 'Y') "
 			 + "	AND pce.isactive = 'Y' "
 			 + "	AND printer.sbsp_printer_id = pce.sbsp_printer_id "
-			 + "ORDER BY pce.isstandardprintconfig ASC "
+			 + "	AND params.session_id = ses.ad_session_id "
+			 + "	AND (pce.remote_addr = ses.remote_addr OR pce.remote_addr is null) "
+			 + "ORDER BY pce.isstandardprintconfig ASC, pce.remote_addr NULLS LAST "
 			 + "FETCH FIRST ROW ONLY"; 
 			
 			pstmt = DB.prepareStatement(sql, trxName);
@@ -448,6 +454,7 @@ public class Copy {
 			pstmt.setInt(2, p.ad_org_id);
 			pstmt.setInt(3, p.sbsp_printconfig_id);
 			pstmt.setInt(4, p.ad_user_id);
+			pstmt.setInt(5, Env.getContextAsInt(Env.getCtx(), Env.AD_SESSION_ID));
 			rs = pstmt.executeQuery();
 			
 			if (rs.next()) { 

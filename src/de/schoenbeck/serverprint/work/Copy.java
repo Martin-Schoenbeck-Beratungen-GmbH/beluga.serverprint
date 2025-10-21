@@ -324,7 +324,7 @@ public class Copy {
 	}
 	
 	private static void print (ServerPrintCopyParam p, File printedDoc) throws Exception {
-		PrinterConfig conf = printPreparation(p, new FileInputStream(printedDoc), null); //TODO: pass trxname
+		PrinterConfig conf = printPreparation(p, new FileInputStream(printedDoc), p.trxname);
 		try {
 			ServerPrintProcessManager.getPrint(conf.provider.getProtocol())
 				.ifPresentOrElse(
@@ -445,7 +445,7 @@ public class Copy {
 			 + "	AND pce.isactive = 'Y' "
 			 + "	AND printer.sbsp_printer_id = pce.sbsp_printer_id "
 			 + "	AND params.session_id = ses.ad_session_id "
-			 + "	AND (pce.remote_addr = ses.remote_addr OR pce.remote_addr is null) "
+			 + "	AND (inet(pce.remote_addr) >>= inet(ses.remote_addr) OR pce.remote_addr is null) "
 			 + "ORDER BY pce.isstandardprintconfig ASC, pce.remote_addr NULLS LAST "
 			 + "FETCH FIRST ROW ONLY"; 
 			
@@ -541,13 +541,20 @@ public class Copy {
 			throw new AdempiereException ("Not found @AD_Client_ID@");
 		if (m_client.getSMTPHost() == null || m_client.getSMTPHost().length() == 0)
 			throw new Exception ("No SMTP Host found"); //FIXME: more specific exception
-		EMail email = m_client.createEMail(m_from, to, m_MailText.getMailHeader(), message);
+		
+		String[] toAddresses = (to == null ? "" : to).split(";");
+		EMail email = m_client.createEMail(m_from, toAddresses[0], m_MailText.getMailHeader(), message);
 		if (m_MailText.isHtml())
 			email.setMessageHTML(m_MailText.getMailHeader(), message);
 		else
 		{
 			email.setSubject (m_MailText.getMailHeader());
 			email.setMessageText (message);
+		}
+		for (int i = 1; i < toAddresses.length; i++) {
+			if (!email.addTo(toAddresses[i])) {
+				throw new InvalidMailAddressException(toAddresses[i]);
+			}
 		}
 		for (String cc : p.eMailCc) {
 			if (!email.addCc(cc)) {

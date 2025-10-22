@@ -21,33 +21,33 @@ import java.sql.Timestamp;
 import org.compiere.model.*;
 import org.compiere.util.KeyNamePair;
 
-/** Generated Interface for sbsp_printconfig_entry
+/** Generated Interface for sbsp_userqueries
  *  @author iDempiere (generated) 
- *  @version Release 10
+ *  @version Release 12
  */
 @SuppressWarnings("all")
-public interface I_sbsp_printconfig_entry 
+public interface I_sbsp_userqueries 
 {
 
-    /** TableName=sbsp_printconfig_entry */
-    public static final String Table_Name = "sbsp_printconfig_entry";
+    /** TableName=sbsp_userqueries */
+    public static final String Table_Name = "sbsp_userqueries";
 
-    /** AD_Table_ID=1000011 */
+    /** AD_Table_ID=1000042 */
     public static final int Table_ID = MTable.getTable_ID(Table_Name);
 
     KeyNamePair Model = new KeyNamePair(Table_ID, Table_Name);
 
-    /** AccessLevel = 3 - Client - Org 
+    /** AccessLevel = 2 - Client 
      */
-    BigDecimal accessLevel = BigDecimal.valueOf(3);
+    BigDecimal accessLevel = BigDecimal.valueOf(2);
 
     /** Load Meta Data */
 
     /** Column name AD_Client_ID */
     public static final String COLUMNNAME_AD_Client_ID = "AD_Client_ID";
 
-	/** Get Client.
-	  * Client/Tenant for this installation.
+	/** Get Tenant.
+	  * Tenant for this installation.
 	  */
 	public int getAD_Client_ID();
 
@@ -55,29 +55,14 @@ public interface I_sbsp_printconfig_entry
     public static final String COLUMNNAME_AD_Org_ID = "AD_Org_ID";
 
 	/** Set Organization.
-	  * Organizational entity within client
+	  * Organizational entity within tenant
 	  */
 	public void setAD_Org_ID (int AD_Org_ID);
 
 	/** Get Organization.
-	  * Organizational entity within client
+	  * Organizational entity within tenant
 	  */
 	public int getAD_Org_ID();
-
-    /** Column name AD_User_ID */
-    public static final String COLUMNNAME_AD_User_ID = "AD_User_ID";
-
-	/** Set User/Contact.
-	  * User within the system - Internal or Business Partner Contact
-	  */
-	public void setAD_User_ID (int AD_User_ID);
-
-	/** Get User/Contact.
-	  * User within the system - Internal or Business Partner Contact
-	  */
-	public int getAD_User_ID();
-
-	public org.compiere.model.I_AD_User getAD_User() throws RuntimeException;
 
     /** Column name Created */
     public static final String COLUMNNAME_Created = "Created";
@@ -108,6 +93,19 @@ public interface I_sbsp_printconfig_entry
 	  */
 	public String getDescription();
 
+    /** Column name Help */
+    public static final String COLUMNNAME_Help = "Help";
+
+	/** Set Comment/Help.
+	  * Comment or Hint
+	  */
+	public void setHelp (String Help);
+
+	/** Get Comment/Help.
+	  * Comment or Hint
+	  */
+	public String getHelp();
+
     /** Column name IsActive */
     public static final String COLUMNNAME_IsActive = "IsActive";
 
@@ -134,18 +132,14 @@ public interface I_sbsp_printconfig_entry
 	  */
 	public String getName();
 
-    /** Column name Remote_Addr */
-    public static final String COLUMNNAME_Remote_Addr = "Remote_Addr";
+    /** Column name SQLStatement */
+    public static final String COLUMNNAME_SQLStatement = "SQLStatement";
 
-	/** Set Remote Addr.
-	  * Remote Address
-	  */
-	public void setRemote_Addr (String Remote_Addr);
+	/** Set SQL Expression/Statement	  */
+	public void setSQLStatement (String SQLStatement);
 
-	/** Get Remote Addr.
-	  * Remote Address
-	  */
-	public String getRemote_Addr();
+	/** Get SQL Expression/Statement	  */
+	public String getSQLStatement();
 
     /** Column name Updated */
     public static final String COLUMNNAME_Updated = "Updated";
@@ -163,67 +157,34 @@ public interface I_sbsp_printconfig_entry
 	  */
 	public int getUpdatedBy();
 
-    /** Column name isstandardprintconfig */
-    public static final String COLUMNNAME_isstandardprintconfig = "isstandardprintconfig";
+    /** Column name Value */
+    public static final String COLUMNNAME_Value = "Value";
 
-	/** Set isStandardPrintConfig.
-	  * The standard print config is used if no user-special config is found
+	/** Set Search Key.
+	  * Search key for the record in the format required - must be unique
 	  */
-	public void setisstandardprintconfig (boolean isstandardprintconfig);
+	public void setValue (String Value);
 
-	/** Get isStandardPrintConfig.
-	  * The standard print config is used if no user-special config is found
+	/** Get Search Key.
+	  * Search key for the record in the format required - must be unique
 	  */
-	public boolean isstandardprintconfig();
+	public String getValue();
 
-    /** Column name sbsp_printconfig_ID */
-    public static final String COLUMNNAME_sbsp_printconfig_ID = "sbsp_printconfig_ID";
+    /** Column name sbsp_userqueries_ID */
+    public static final String COLUMNNAME_sbsp_userqueries_ID = "sbsp_userqueries_ID";
 
-	/** Set Printconfig	  */
-	public void setsbsp_printconfig_ID (int sbsp_printconfig_ID);
+	/** Set Serverprint User Queries	  */
+	public void setsbsp_userqueries_ID (int sbsp_userqueries_ID);
 
-	/** Get Printconfig	  */
-	public int getsbsp_printconfig_ID();
+	/** Get Serverprint User Queries	  */
+	public int getsbsp_userqueries_ID();
 
-	public I_sbsp_printconfig getsbsp_printconfig() throws RuntimeException;
+    /** Column name sbsp_userqueries_UU */
+    public static final String COLUMNNAME_sbsp_userqueries_UU = "sbsp_userqueries_UU";
 
-    /** Column name sbsp_printconfig_entry_ID */
-    public static final String COLUMNNAME_sbsp_printconfig_entry_ID = "sbsp_printconfig_entry_ID";
+	/** Set sbsp_userqueries_UU	  */
+	public void setsbsp_userqueries_UU (String sbsp_userqueries_UU);
 
-	/** Set Printconfigentry	  */
-	public void setsbsp_printconfig_entry_ID (int sbsp_printconfig_entry_ID);
-
-	/** Get Printconfigentry	  */
-	public int getsbsp_printconfig_entry_ID();
-
-    /** Column name sbsp_printconfig_entry_UU */
-    public static final String COLUMNNAME_sbsp_printconfig_entry_UU = "sbsp_printconfig_entry_UU";
-
-	/** Set sbsp_printconfig_entry_UU	  */
-	public void setsbsp_printconfig_entry_UU (String sbsp_printconfig_entry_UU);
-
-	/** Get sbsp_printconfig_entry_UU	  */
-	public String getsbsp_printconfig_entry_UU();
-
-    /** Column name sbsp_printer_ID */
-    public static final String COLUMNNAME_sbsp_printer_ID = "sbsp_printer_ID";
-
-	/** Set Printer	  */
-	public void setsbsp_printer_ID (int sbsp_printer_ID);
-
-	/** Get Printer	  */
-	public int getsbsp_printer_ID();
-
-	public I_sbsp_printer getsbsp_printer() throws RuntimeException;
-
-    /** Column name sbsp_printerconfig_ID */
-    public static final String COLUMNNAME_sbsp_printerconfig_ID = "sbsp_printerconfig_ID";
-
-	/** Set Printer Config	  */
-	public void setsbsp_printerconfig_ID (int sbsp_printerconfig_ID);
-
-	/** Get Printer Config	  */
-	public int getsbsp_printerconfig_ID();
-
-	public I_sbsp_printerconfig getsbsp_printerconfig() throws RuntimeException;
+	/** Get sbsp_userqueries_UU	  */
+	public String getsbsp_userqueries_UU();
 }

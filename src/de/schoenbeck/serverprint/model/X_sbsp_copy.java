@@ -54,6 +54,8 @@ public class X_sbsp_copy extends PO implements I_sbsp_copy, I_Persistent
 // N
 			settoArchive (false);
 // N
+			setuse_existing (false);
+// 'N'
         } */
     }
 
@@ -78,6 +80,60 @@ public class X_sbsp_copy extends PO implements I_sbsp_copy, I_Persistent
 // N
 			settoArchive (false);
 // N
+			setuse_existing (false);
+// 'N'
+        } */
+    }
+
+    /** Standard Constructor */
+    public X_sbsp_copy (Properties ctx, String sbsp_copy_UU, String trxName)
+    {
+      super (ctx, sbsp_copy_UU, trxName);
+      /** if (sbsp_copy_UU == null)
+        {
+			setAD_Process_ID (0);
+			setName (null);
+			setactualUserAsFrom (false);
+// N
+			setmailToAddress (false);
+// N
+			setmailToUser (false);
+// N
+			setsbsp_copy_ID (0);
+			setsbsp_copytype_ID (0);
+			setsbsp_subprintprofile_ID (0);
+			setsenddirectly (false);
+// N
+			settoArchive (false);
+// N
+			setuse_existing (false);
+// 'N'
+        } */
+    }
+
+    /** Standard Constructor */
+    public X_sbsp_copy (Properties ctx, String sbsp_copy_UU, String trxName, String ... virtualColumns)
+    {
+      super (ctx, sbsp_copy_UU, trxName, virtualColumns);
+      /** if (sbsp_copy_UU == null)
+        {
+			setAD_Process_ID (0);
+			setName (null);
+			setactualUserAsFrom (false);
+// N
+			setmailToAddress (false);
+// N
+			setmailToUser (false);
+// N
+			setsbsp_copy_ID (0);
+			setsbsp_copytype_ID (0);
+			setsbsp_subprintprofile_ID (0);
+			setsenddirectly (false);
+// N
+			settoArchive (false);
+// N
+			setuse_existing (false);
+// 'N'
         } */
     }
 
@@ -512,6 +568,30 @@ public class X_sbsp_copy extends PO implements I_sbsp_copy, I_Persistent
 	public int getsbsp_copytype_ID()
 	{
 		Integer ii = (Integer)get_Value(COLUMNNAME_sbsp_copytype_ID);
+		if (ii == null)
+			 return 0;
+		return ii.intValue();
+	}
+
+	public I_sbsp_userqueries getsbsp_mailto() throws RuntimeException
+	{
+		return (I_sbsp_userqueries)MTable.get(getCtx(), I_sbsp_userqueries.Table_ID)
+			.getPO(getsbsp_mailtosql(), get_TrxName());
+	}
+
+	/** Set MailTo Query.
+		@param sbsp_mailtosql MailTo Query
+	*/
+	public void setsbsp_mailtosql (int sbsp_mailtosql)
+	{
+		set_ValueNoCheck (COLUMNNAME_sbsp_mailtosql, Integer.valueOf(sbsp_mailtosql));
+	}
+
+	/** Get MailTo Query.
+		@return MailTo Query	  */
+	public int getsbsp_mailtosql()
+	{
+		Integer ii = (Integer)get_Value(COLUMNNAME_sbsp_mailtosql);
 		if (ii == null)
 			 return 0;
 		return ii.intValue();

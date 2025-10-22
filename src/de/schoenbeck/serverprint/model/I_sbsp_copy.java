@@ -349,6 +349,17 @@ public interface I_sbsp_copy
 
 	public I_sbsp_copytype getsbsp_copytype() throws RuntimeException;
 
+    /** Column name sbsp_mailtosql */
+    public static final String COLUMNNAME_sbsp_mailtosql = "sbsp_mailtosql";
+
+	/** Set MailTo Query	  */
+	public void setsbsp_mailtosql (int sbsp_mailtosql);
+
+	/** Get MailTo Query	  */
+	public int getsbsp_mailtosql();
+
+	public I_sbsp_userqueries getsbsp_mailto() throws RuntimeException;
+
     /** Column name sbsp_printconfig_ID */
     public static final String COLUMNNAME_sbsp_printconfig_ID = "sbsp_printconfig_ID";
 

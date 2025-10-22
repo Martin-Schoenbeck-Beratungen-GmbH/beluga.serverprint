@@ -57,6 +57,30 @@ public class X_sbsp_attributevalue extends PO implements I_sbsp_attributevalue, 
         } */
     }
 
+    /** Standard Constructor */
+    public X_sbsp_attributevalue (Properties ctx, String sbsp_attributevalue_UU, String trxName)
+    {
+      super (ctx, sbsp_attributevalue_UU, trxName);
+      /** if (sbsp_attributevalue_UU == null)
+        {
+			setName (null);
+			setsbsp_attributename_ID (0);
+			setsbsp_attributevalue_ID (0);
+        } */
+    }
+
+    /** Standard Constructor */
+    public X_sbsp_attributevalue (Properties ctx, String sbsp_attributevalue_UU, String trxName, String ... virtualColumns)
+    {
+      super (ctx, sbsp_attributevalue_UU, trxName, virtualColumns);
+      /** if (sbsp_attributevalue_UU == null)
+        {
+			setName (null);
+			setsbsp_attributename_ID (0);
+			setsbsp_attributevalue_ID (0);
+        } */
+    }
+
     /** Load Constructor */
     public X_sbsp_attributevalue (Properties ctx, ResultSet rs, String trxName)
     {

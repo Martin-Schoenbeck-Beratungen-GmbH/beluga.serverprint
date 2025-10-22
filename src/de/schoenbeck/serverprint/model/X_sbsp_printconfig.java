@@ -57,6 +57,30 @@ public class X_sbsp_printconfig extends PO implements I_sbsp_printconfig, I_Pers
         } */
     }
 
+    /** Standard Constructor */
+    public X_sbsp_printconfig (Properties ctx, String sbsp_printconfig_UU, String trxName)
+    {
+      super (ctx, sbsp_printconfig_UU, trxName);
+      /** if (sbsp_printconfig_UU == null)
+        {
+			setName (null);
+			setValue (null);
+			setsbsp_printconfig_ID (0);
+        } */
+    }
+
+    /** Standard Constructor */
+    public X_sbsp_printconfig (Properties ctx, String sbsp_printconfig_UU, String trxName, String ... virtualColumns)
+    {
+      super (ctx, sbsp_printconfig_UU, trxName, virtualColumns);
+      /** if (sbsp_printconfig_UU == null)
+        {
+			setName (null);
+			setValue (null);
+			setsbsp_printconfig_ID (0);
+        } */
+    }
+
     /** Load Constructor */
     public X_sbsp_printconfig (Properties ctx, ResultSet rs, String trxName)
     {

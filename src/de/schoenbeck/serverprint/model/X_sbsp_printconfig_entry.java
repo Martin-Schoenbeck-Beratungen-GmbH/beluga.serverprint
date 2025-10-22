@@ -65,6 +65,38 @@ public class X_sbsp_printconfig_entry extends PO implements I_sbsp_printconfig_e
         } */
     }
 
+    /** Standard Constructor */
+    public X_sbsp_printconfig_entry (Properties ctx, String sbsp_printconfig_entry_UU, String trxName)
+    {
+      super (ctx, sbsp_printconfig_entry_UU, trxName);
+      /** if (sbsp_printconfig_entry_UU == null)
+        {
+			setName (null);
+			setisstandardprintconfig (false);
+// N
+			setsbsp_printconfig_ID (0);
+			setsbsp_printconfig_entry_ID (0);
+			setsbsp_printer_ID (0);
+			setsbsp_printerconfig_ID (0);
+        } */
+    }
+
+    /** Standard Constructor */
+    public X_sbsp_printconfig_entry (Properties ctx, String sbsp_printconfig_entry_UU, String trxName, String ... virtualColumns)
+    {
+      super (ctx, sbsp_printconfig_entry_UU, trxName, virtualColumns);
+      /** if (sbsp_printconfig_entry_UU == null)
+        {
+			setName (null);
+			setisstandardprintconfig (false);
+// N
+			setsbsp_printconfig_ID (0);
+			setsbsp_printconfig_entry_ID (0);
+			setsbsp_printer_ID (0);
+			setsbsp_printerconfig_ID (0);
+        } */
+    }
+
     /** Load Constructor */
     public X_sbsp_printconfig_entry (Properties ctx, ResultSet rs, String trxName)
     {
@@ -151,6 +183,22 @@ public class X_sbsp_printconfig_entry extends PO implements I_sbsp_printconfig_e
 	public String getName()
 	{
 		return (String)get_Value(COLUMNNAME_Name);
+	}
+
+	/** Set Remote Addr.
+		@param Remote_Addr Remote Address
+	*/
+	public void setRemote_Addr (String Remote_Addr)
+	{
+		set_Value (COLUMNNAME_Remote_Addr, Remote_Addr);
+	}
+
+	/** Get Remote Addr.
+		@return Remote Address
+	  */
+	public String getRemote_Addr()
+	{
+		return (String)get_Value(COLUMNNAME_Remote_Addr);
 	}
 
 	/** Set isStandardPrintConfig.

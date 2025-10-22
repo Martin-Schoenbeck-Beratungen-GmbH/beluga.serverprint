@@ -56,6 +56,37 @@ public class X_sbsp_printprofile extends PO implements I_sbsp_printprofile, I_Pe
 			setName (null);
 			setValue (null);
 			setisstandardprintprofile (false);
+// N
+			setprintpriority (0);
+			setsbsp_printprofile_ID (0);
+        } */
+    }
+
+    /** Standard Constructor */
+    public X_sbsp_printprofile (Properties ctx, String sbsp_printprofile_UU, String trxName)
+    {
+      super (ctx, sbsp_printprofile_UU, trxName);
+      /** if (sbsp_printprofile_UU == null)
+        {
+			setName (null);
+			setValue (null);
+			setisstandardprintprofile (false);
+// N
+			setprintpriority (0);
+			setsbsp_printprofile_ID (0);
+        } */
+    }
+
+    /** Standard Constructor */
+    public X_sbsp_printprofile (Properties ctx, String sbsp_printprofile_UU, String trxName, String ... virtualColumns)
+    {
+      super (ctx, sbsp_printprofile_UU, trxName, virtualColumns);
+      /** if (sbsp_printprofile_UU == null)
+        {
+			setName (null);
+			setValue (null);
+			setisstandardprintprofile (false);
+// N
 			setprintpriority (0);
 			setsbsp_printprofile_ID (0);
         } */

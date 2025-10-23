@@ -1,10 +1,21 @@
 package de.schoenbeck.serverprint.params;
 
-import java.util.Arrays;
-import java.util.List;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
+import java.util.regex.Matcher;
 
+import org.compiere.model.MTable;
+import org.compiere.model.PO;
 import org.compiere.process.ProcessInfoParameter;
+import org.compiere.util.DB;
+import org.compiere.util.Env;
+
+import de.schoenbeck.serverprint.work.Copy;
 
 public class ServerPrintCopyParam {
 
@@ -23,8 +34,9 @@ public class ServerPrintCopyParam {
 	public final int r_mailtext_id;
 	public final int copies;
 	public final String eMailTo;
-	public final List<String> eMailCc;
-	public final List<String> eMailBcc;
+	public final Set<String> eMailCc;
+	public final Set<String> eMailBcc;
+	public final Set<String> eMailFromQuery;
 	public final String[] mailAttPrefix;
 	
 	public final boolean toArchive;
@@ -48,7 +60,7 @@ public class ServerPrintCopyParam {
 	public final String trxname;
 	
 	
-	ServerPrintCopyParam(ServerPrintCopyParamBuilder b) {
+	ServerPrintCopyParam(ServerPrintCopyParamBuilder b) throws SQLException {
 		this.ad_client_id = b.ad_client_id;
 		this.ad_org_id = b.ad_org_id;
 		this.ad_user_id = b.ad_user_id;
@@ -81,6 +93,47 @@ public class ServerPrintCopyParam {
 		this.sbsp_printoption_id = b.sbsp_printoption_id;
 		this.sbsp_copy_id = b.sbsp_copy_id;
 		this.processParams = b.processParams;
+		
+		this.eMailFromQuery = b.eMailFromQuery != null ? executeMailQuery(b.eMailFromQuery) : Collections.emptySet();
+	}
+
+	/**
+	 * Executes the query to gather more email addresses.
+	 * Does so as early as possible to fail fast.
+	 * <br>
+	 * Warning: Token replacement syntax is not injection-safe!
+	 * @param eMailFromQuery - A syntactically correct and injection-safe SQL Query
+	 * @return A Set of mail addresses
+	 * @throws SQLException
+	 */
+	private Set<String> executeMailQuery(String eMailFromQuery) throws SQLException {
+		String sql = replaceTokens(eMailFromQuery);
+		Set<String> rtn = new HashSet<>();
+		
+		PreparedStatement ps = DB.prepareStatement(sql, this.trxname);
+		ResultSet rs = null;
+		try {
+			rs = ps.executeQuery();
+			while (rs.next())
+				rtn.add(rs.getString(1));
+		}finally {
+			DB.close(rs, ps);
+		}
+		
+		return rtn;
+	}
+	private String replaceTokens(String rawSQL) {
+		PO record = MTable.get(this.ad_table_id).getPO(this.record_id, null);
+		String rtn = rawSQL;
+		
+		final Matcher replacements = Copy.TITLE_REPLACE_REGEX.matcher(rtn);
+		while (replacements.find()) {
+			int index = record.get_ColumnIndex(replacements.group(1));
+			if (index >= 0)
+				rtn = rtn.replaceFirst(Matcher.quoteReplacement(replacements.group(0)), record.get_Value(index).toString());
+		}
+		
+		return Env.parseContext(Env.getCtx(), this.windowno, rtn, false, true);
 	}
 
 	@Override

@@ -39,6 +39,8 @@ public class X_sbsp_printoption extends PO implements I_sbsp_printoption, I_Pers
       super (ctx, sbsp_printoption_ID, trxName);
       /** if (sbsp_printoption_ID == 0)
         {
+			setIsLimitedToProcess (false);
+// N
 			setName (null);
 			setsbsp_printoption_ID (0);
         } */
@@ -50,6 +52,34 @@ public class X_sbsp_printoption extends PO implements I_sbsp_printoption, I_Pers
       super (ctx, sbsp_printoption_ID, trxName, virtualColumns);
       /** if (sbsp_printoption_ID == 0)
         {
+			setIsLimitedToProcess (false);
+// N
+			setName (null);
+			setsbsp_printoption_ID (0);
+        } */
+    }
+
+    /** Standard Constructor */
+    public X_sbsp_printoption (Properties ctx, String sbsp_printoption_UU, String trxName)
+    {
+      super (ctx, sbsp_printoption_UU, trxName);
+      /** if (sbsp_printoption_UU == null)
+        {
+			setIsLimitedToProcess (false);
+// N
+			setName (null);
+			setsbsp_printoption_ID (0);
+        } */
+    }
+
+    /** Standard Constructor */
+    public X_sbsp_printoption (Properties ctx, String sbsp_printoption_UU, String trxName, String ... virtualColumns)
+    {
+      super (ctx, sbsp_printoption_UU, trxName, virtualColumns);
+      /** if (sbsp_printoption_UU == null)
+        {
+			setIsLimitedToProcess (false);
+// N
 			setName (null);
 			setsbsp_printoption_ID (0);
         } */

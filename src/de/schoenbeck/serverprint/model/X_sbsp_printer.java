@@ -61,6 +61,34 @@ public class X_sbsp_printer extends PO implements I_sbsp_printer, I_Persistent
         } */
     }
 
+    /** Standard Constructor */
+    public X_sbsp_printer (Properties ctx, String sbsp_printer_UU, String trxName)
+    {
+      super (ctx, sbsp_printer_UU, trxName);
+      /** if (sbsp_printer_UU == null)
+        {
+			setName (null);
+			setValue (null);
+			setlookup (null);
+// 'n'
+			setsbsp_printer_ID (0);
+        } */
+    }
+
+    /** Standard Constructor */
+    public X_sbsp_printer (Properties ctx, String sbsp_printer_UU, String trxName, String ... virtualColumns)
+    {
+      super (ctx, sbsp_printer_UU, trxName, virtualColumns);
+      /** if (sbsp_printer_UU == null)
+        {
+			setName (null);
+			setValue (null);
+			setlookup (null);
+// 'n'
+			setsbsp_printer_ID (0);
+        } */
+    }
+
     /** Load Constructor */
     public X_sbsp_printer (Properties ctx, ResultSet rs, String trxName)
     {

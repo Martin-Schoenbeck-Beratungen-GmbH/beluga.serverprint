@@ -16,10 +16,11 @@ import java.nio.file.attribute.FileAttribute;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashSet;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -122,13 +123,12 @@ public class Copy {
 		  * which are defined for that copytype the subprofile was chosen for. Sorted by ad_process_id
 		  * so that each jasper report has to be run only once as soon as it is found 
 		  */
-		 + "	 select params.c_bpartner_id, params.ad_user_id, params.ad_org_id, params.ad_tab_id, params.c_doctype_id, cp.* "
-		 + "	   from subprofiles sub,"
-		 + "	        sbsp_copy cp,"
-		 + "	        params "
-		 + "	  where cp.sbsp_subprintprofile_id = sub.sbsp_subprintprofile_id "
-		 + "	    and cp.sbsp_copytype_id = sub.sbsp_copytype_id "
-		 + "	    and cp.ad_client_id = params.ad_client_id "
+		 + "	 select params.c_bpartner_id, params.ad_user_id, params.ad_org_id, params.ad_tab_id, params.c_doctype_id, cp.*, qry.SQLStatement AS mailquery "
+		 + "	   from subprofiles sub "
+		 + "		join params on 1=1 "
+		 + "		join sbsp_copy cp on cp.sbsp_subprintprofile_id = sub.sbsp_subprintprofile_id and cp.sbsp_copytype_id = sub.sbsp_copytype_id "
+		 + "		left join sbsp_userqueries qry on cp.sbsp_mailtosql_id = qry.sbsp_userqueries_ID "
+		 + "	  where cp.ad_client_id = params.ad_client_id "
 		 + "	    and cp.isactive = 'Y' "
 		 + "	    and (cp.ad_org_id = 0 or cp.ad_org_id = params.ad_org_id)"
 		 + "		and (coalesce(cp.sbsp_printoption_id,0) = 0 "
@@ -170,7 +170,10 @@ public class Copy {
 	    	}
 		}
 
-		if (copyParams[0].mailtouser || copyParams[0].mailtoaddress) {
+		if (copyParams[0].mailtouser
+				|| copyParams[0].mailtoaddress
+				|| copyParams[0].eMailFromQuery.size() > 0
+		) {
 			sendMail(copyParams[0], mailFileList.toArray(new File[mailFileList.size()]));
 		}
 	}
@@ -262,7 +265,7 @@ public class Copy {
 	
 	// PRIVATE METHODS ////
 	
-	private static final Pattern TITLE_REPLACE_REGEX = Pattern.compile("@\\$([^@ \\n]+)@");
+	public static final Pattern TITLE_REPLACE_REGEX = Pattern.compile("@\\$([^@ \\n]+)@");
 	private static String createReportTitle(ServerPrintCopyParam p) {
 		if (p.exportFilenamePattern == null || p.exportFilenamePattern.equals(""))
 			return null;
@@ -324,7 +327,7 @@ public class Copy {
 	}
 	
 	private static void print (ServerPrintCopyParam p, File printedDoc) throws Exception {
-		PrinterConfig conf = printPreparation(p, new FileInputStream(printedDoc), null); //TODO: pass trxname
+		PrinterConfig conf = printPreparation(p, new FileInputStream(printedDoc), p.trxname);
 		try {
 			ServerPrintProcessManager.getPrint(conf.provider.getProtocol())
 				.ifPresentOrElse(
@@ -355,25 +358,30 @@ public class Copy {
 		props.put("mail.mime.allowutf8", "true");
 
 
-    	/* set mail of ad_user_id_bpartner as To: */
-		if (p.mailtouser && p.ad_user_id_bpartner > 0)
-			m_to = new MUser(Env.getCtx(), p.ad_user_id_bpartner, null);
-		
-    	if (p.mailtouser) {
-    		if (m_to == null)
-    			throw new NullPointerException(Msg.getMsg(Env.getCtx(), "Noemailto"));
-    	    to = m_to.getEMail();
-    	}
-    	
-    	if (p.mailtoaddress) {
-    		if (p.mailtouser)
-    			p.eMailCc.add(p.eMailTo); //set fixed mail address as CC
-    		else 
-    			to = p.eMailTo; //set fixed mail address as To
-    	}
-    	
-    	if (to == null)
-			throw new NullPointerException(Msg.getMsg(Env.getCtx(), "Noemailto"));
+		{			
+			LinkedList<String> allMailAddresses = new LinkedList<String>();
+	
+			/* set mail of ad_user_id_bpartner as To: */			
+	    	if (p.mailtouser) {
+	    		if (p.ad_user_id_bpartner <= 0)
+	    			throw new NullPointerException(Msg.getMsg(Env.getCtx(), "Noemailto"));
+	    		m_to = new MUser(Env.getCtx(), p.ad_user_id_bpartner, null);
+	    	    allMailAddresses.add(m_to.getEMail());
+	    	}
+	    	
+	    	if (p.mailtoaddress) {
+	    		allMailAddresses.add(p.eMailTo); //set fixed mail address as To
+	    	}
+	    	
+	    	allMailAddresses.addAll(p.eMailFromQuery);
+	    	
+	    	allMailAddresses.remove(null);
+	    	if (allMailAddresses.size() == 0)
+	    		throw new NullPointerException(Msg.getMsg(Env.getCtx(), "Noemailto"));
+	    	
+	    	to = allMailAddresses.pop();
+	    	p.eMailCc.addAll(allMailAddresses);
+		}
 
     	
     	if (p.r_mailtext_id > 0) {
@@ -445,7 +453,7 @@ public class Copy {
 			 + "	AND pce.isactive = 'Y' "
 			 + "	AND printer.sbsp_printer_id = pce.sbsp_printer_id "
 			 + "	AND params.session_id = ses.ad_session_id "
-			 + "	AND (pce.remote_addr = ses.remote_addr OR pce.remote_addr is null) "
+			 + "	AND (inet(pce.remote_addr) >>= inet(ses.remote_addr) OR pce.remote_addr is null) "
 			 + "ORDER BY pce.isstandardprintconfig ASC, pce.remote_addr NULLS LAST "
 			 + "FETCH FIRST ROW ONLY"; 
 			
@@ -541,13 +549,20 @@ public class Copy {
 			throw new AdempiereException ("Not found @AD_Client_ID@");
 		if (m_client.getSMTPHost() == null || m_client.getSMTPHost().length() == 0)
 			throw new Exception ("No SMTP Host found"); //FIXME: more specific exception
-		EMail email = m_client.createEMail(m_from, to, m_MailText.getMailHeader(), message);
+		
+		String[] toAddresses = (to == null ? "" : to).split(";");
+		EMail email = m_client.createEMail(m_from, toAddresses[0], m_MailText.getMailHeader(), message);
 		if (m_MailText.isHtml())
 			email.setMessageHTML(m_MailText.getMailHeader(), message);
 		else
 		{
 			email.setSubject (m_MailText.getMailHeader());
 			email.setMessageText (message);
+		}
+		for (int i = 1; i < toAddresses.length; i++) {
+			if (!email.addTo(toAddresses[i])) {
+				throw new InvalidMailAddressException(toAddresses[i]);
+			}
 		}
 		for (String cc : p.eMailCc) {
 			if (!email.addCc(cc)) {
@@ -630,8 +645,8 @@ public class Copy {
 
 	// STATIC METHODS ////
 	
-	public static List<String> makeCcList (String dbEntry) {
-    	LinkedList<String> rtn = new LinkedList<>();
+	public static Set<String> makeCcList (String dbEntry) {
+    	HashSet<String> rtn = new HashSet<>();
     	if (dbEntry != null && !dbEntry.equals("")) //if necessary, return empty list to continue workflow
     		for (String s : dbEntry.split(","))
     			rtn.add(s.trim());

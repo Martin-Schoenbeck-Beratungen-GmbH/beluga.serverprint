@@ -55,6 +55,28 @@ public class X_sbsp_printprofilelink extends PO implements I_sbsp_printprofileli
         } */
     }
 
+    /** Standard Constructor */
+    public X_sbsp_printprofilelink (Properties ctx, String sbsp_printprofilelink_UU, String trxName)
+    {
+      super (ctx, sbsp_printprofilelink_UU, trxName);
+      /** if (sbsp_printprofilelink_UU == null)
+        {
+			setsbsp_printprofile_ID (0);
+			setsbsp_printprofilelink_ID (0);
+        } */
+    }
+
+    /** Standard Constructor */
+    public X_sbsp_printprofilelink (Properties ctx, String sbsp_printprofilelink_UU, String trxName, String ... virtualColumns)
+    {
+      super (ctx, sbsp_printprofilelink_UU, trxName, virtualColumns);
+      /** if (sbsp_printprofilelink_UU == null)
+        {
+			setsbsp_printprofile_ID (0);
+			setsbsp_printprofilelink_ID (0);
+        } */
+    }
+
     /** Load Constructor */
     public X_sbsp_printprofilelink (Properties ctx, ResultSet rs, String trxName)
     {

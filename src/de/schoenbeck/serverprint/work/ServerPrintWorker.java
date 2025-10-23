@@ -16,12 +16,9 @@ import java.util.logging.Level;
 
 import org.adempiere.webui.adwindow.ADWindow;
 import org.adempiere.webui.adwindow.ADWindowContent;
-import org.adempiere.webui.editor.WButtonEditor;
 import org.adempiere.webui.editor.WEditor;
 import org.adempiere.webui.editor.WRadioGroupEditor;
 import org.adempiere.webui.window.Dialog;
-import org.compiere.model.GridField;
-import org.compiere.model.GridFieldVO;
 import org.compiere.model.MLookup;
 import org.compiere.model.MLookupFactory;
 import org.compiere.model.MTable;

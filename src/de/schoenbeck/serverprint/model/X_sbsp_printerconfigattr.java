@@ -59,6 +59,32 @@ public class X_sbsp_printerconfigattr extends PO implements I_sbsp_printerconfig
         } */
     }
 
+    /** Standard Constructor */
+    public X_sbsp_printerconfigattr (Properties ctx, String sbsp_printerconfigattr_UU, String trxName)
+    {
+      super (ctx, sbsp_printerconfigattr_UU, trxName);
+      /** if (sbsp_printerconfigattr_UU == null)
+        {
+			setValue (null);
+			setsbsp_attributename_ID (0);
+			setsbsp_printerconfig_ID (0);
+			setsbsp_printerconfigattr_ID (0);
+        } */
+    }
+
+    /** Standard Constructor */
+    public X_sbsp_printerconfigattr (Properties ctx, String sbsp_printerconfigattr_UU, String trxName, String ... virtualColumns)
+    {
+      super (ctx, sbsp_printerconfigattr_UU, trxName, virtualColumns);
+      /** if (sbsp_printerconfigattr_UU == null)
+        {
+			setValue (null);
+			setsbsp_attributename_ID (0);
+			setsbsp_printerconfig_ID (0);
+			setsbsp_printerconfigattr_ID (0);
+        } */
+    }
+
     /** Load Constructor */
     public X_sbsp_printerconfigattr (Properties ctx, ResultSet rs, String trxName)
     {

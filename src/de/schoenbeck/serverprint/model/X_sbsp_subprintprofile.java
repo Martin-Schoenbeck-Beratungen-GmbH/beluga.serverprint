@@ -57,6 +57,30 @@ public class X_sbsp_subprintprofile extends PO implements I_sbsp_subprintprofile
         } */
     }
 
+    /** Standard Constructor */
+    public X_sbsp_subprintprofile (Properties ctx, String sbsp_subprintprofile_UU, String trxName)
+    {
+      super (ctx, sbsp_subprintprofile_UU, trxName);
+      /** if (sbsp_subprintprofile_UU == null)
+        {
+			setName (null);
+			setsbsp_printprofile_ID (0);
+			setsbsp_subprintprofile_ID (0);
+        } */
+    }
+
+    /** Standard Constructor */
+    public X_sbsp_subprintprofile (Properties ctx, String sbsp_subprintprofile_UU, String trxName, String ... virtualColumns)
+    {
+      super (ctx, sbsp_subprintprofile_UU, trxName, virtualColumns);
+      /** if (sbsp_subprintprofile_UU == null)
+        {
+			setName (null);
+			setsbsp_printprofile_ID (0);
+			setsbsp_subprintprofile_ID (0);
+        } */
+    }
+
     /** Load Constructor */
     public X_sbsp_subprintprofile (Properties ctx, ResultSet rs, String trxName)
     {

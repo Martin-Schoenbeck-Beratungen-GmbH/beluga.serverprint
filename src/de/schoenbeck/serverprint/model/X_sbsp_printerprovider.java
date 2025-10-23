@@ -55,6 +55,28 @@ public class X_sbsp_printerprovider extends PO implements I_sbsp_printerprovider
         } */
     }
 
+    /** Standard Constructor */
+    public X_sbsp_printerprovider (Properties ctx, String sbsp_printerprovider_UU, String trxName)
+    {
+      super (ctx, sbsp_printerprovider_UU, trxName);
+      /** if (sbsp_printerprovider_UU == null)
+        {
+			setName (null);
+			setsbsp_printerprovider_ID (0);
+        } */
+    }
+
+    /** Standard Constructor */
+    public X_sbsp_printerprovider (Properties ctx, String sbsp_printerprovider_UU, String trxName, String ... virtualColumns)
+    {
+      super (ctx, sbsp_printerprovider_UU, trxName, virtualColumns);
+      /** if (sbsp_printerprovider_UU == null)
+        {
+			setName (null);
+			setsbsp_printerprovider_ID (0);
+        } */
+    }
+
     /** Load Constructor */
     public X_sbsp_printerprovider (Properties ctx, ResultSet rs, String trxName)
     {

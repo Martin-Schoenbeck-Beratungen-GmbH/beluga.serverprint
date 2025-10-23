@@ -3,7 +3,7 @@ package de.schoenbeck.serverprint.params;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Collections;
-import java.util.List;
+import java.util.Set;
 
 import org.compiere.model.MBPartner;
 import org.compiere.model.MDocType;
@@ -30,8 +30,9 @@ public class ServerPrintCopyParamBuilder {
 	int r_mailtext_id = 0;
 	int copies = 0;
 	String eMailTo = "";
-	List<String> eMailCc = java.util.Collections.emptyList();
-	List<String> eMailBcc = java.util.Collections.emptyList();
+	Set<String> eMailCc = Collections.emptySet();
+	Set<String> eMailBcc = Collections.emptySet();
+	String eMailFromQuery = null;
 	String[] mailAttPrefix = {};
 	
 	boolean toArchive = false;
@@ -95,6 +96,7 @@ public class ServerPrintCopyParamBuilder {
 		this.eMailTo = nvl(rs.getString(X_sbsp_copy.COLUMNNAME_EMail_To));
 		this.eMailCc = Copy.makeCcList(rs.getString(X_sbsp_copy.COLUMNNAME_EMail_CC));
 		this.eMailBcc = Copy.makeCcList(rs.getString(X_sbsp_copy.COLUMNNAME_RecipientBcc));
+		this.eMailFromQuery = rs.getString("mailquery");
 		this.mailAttPrefix = ( (rs.getString(X_sbsp_copy.COLUMNNAME_mailattachment_prefix) != null) ? (rs.getString(X_sbsp_copy.COLUMNNAME_mailattachment_prefix).split(",")) : new String[0] );
 		this.mailtoaddress = rs.getString(X_sbsp_copy.COLUMNNAME_mailToAddress).equals("Y");
 		this.mailtouser = rs.getString(X_sbsp_copy.COLUMNNAME_mailToUser).equals("Y");
@@ -183,13 +185,18 @@ public class ServerPrintCopyParamBuilder {
 		return this;
 	}
 
-	public ServerPrintCopyParamBuilder seteMailCc(List<String> eMailCc) {
-		this.eMailCc = (eMailCc != null) ? eMailCc : Collections.emptyList();
+	public ServerPrintCopyParamBuilder seteMailCc(Set<String> eMailCc) {
+		this.eMailCc = (eMailCc != null) ? eMailCc : Collections.emptySet();
 		return this;
 	}
 
-	public ServerPrintCopyParamBuilder seteMailBcc(List<String> eMailBcc) {
-		this.eMailBcc = (eMailBcc != null) ? eMailBcc : Collections.emptyList();
+	public ServerPrintCopyParamBuilder seteMailBcc(Set<String> eMailBcc) {
+		this.eMailBcc = (eMailBcc != null) ? eMailBcc : Collections.emptySet();
+		return this;
+	}
+	
+	public ServerPrintCopyParamBuilder seteMailFromQuery(String eMailFromQuery) {
+		this.eMailFromQuery = eMailFromQuery;
 		return this;
 	}
 	
@@ -263,7 +270,7 @@ public class ServerPrintCopyParamBuilder {
 		return this;
 	}
 
-	public ServerPrintCopyParam build () {
+	public ServerPrintCopyParam build () throws SQLException {
 		return new ServerPrintCopyParam(this);
 	}
 	

@@ -57,6 +57,30 @@ public class X_sbsp_copytype extends PO implements I_sbsp_copytype, I_Persistent
         } */
     }
 
+    /** Standard Constructor */
+    public X_sbsp_copytype (Properties ctx, String sbsp_copytype_UU, String trxName)
+    {
+      super (ctx, sbsp_copytype_UU, trxName);
+      /** if (sbsp_copytype_UU == null)
+        {
+			setName (null);
+			setValue (null);
+			setsbsp_copytype_ID (0);
+        } */
+    }
+
+    /** Standard Constructor */
+    public X_sbsp_copytype (Properties ctx, String sbsp_copytype_UU, String trxName, String ... virtualColumns)
+    {
+      super (ctx, sbsp_copytype_UU, trxName, virtualColumns);
+      /** if (sbsp_copytype_UU == null)
+        {
+			setName (null);
+			setValue (null);
+			setsbsp_copytype_ID (0);
+        } */
+    }
+
     /** Load Constructor */
     public X_sbsp_copytype (Properties ctx, ResultSet rs, String trxName)
     {

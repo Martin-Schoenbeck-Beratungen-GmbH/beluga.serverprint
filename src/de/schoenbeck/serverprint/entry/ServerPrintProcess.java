@@ -45,7 +45,8 @@ public class ServerPrintProcess extends SvrProcess {
 			case "AD_Table_ID":
 				ad_table_id = p.getParameterAsInt();
 				break;
-			case "AD_User_ID_bpartner":
+			case "AD_User_ID_bpartner": //for compatibility
+			case "BPartner_AD_User_ID":
 				ad_user_id_bpartner = p.getParameterAsInt();
 				break;
 			case "sbsp_printoption_ID":

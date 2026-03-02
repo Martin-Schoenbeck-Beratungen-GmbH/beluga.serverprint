@@ -106,6 +106,7 @@ public class ServerPrintWorker {
 			ps.setInt(5, params[0].c_doctype_id);
 			ps.setInt(6, params[0].ad_tab_id);
 			ps.setString(7, isCalledFromProcess ? "Y" : "N");
+			ps.setInt(8, params[0].sbsp_printoption_id);
 			
 			rs = ps.executeQuery();
 			while (rs.next()) {
@@ -248,9 +249,11 @@ public class ServerPrintWorker {
 				ps.setInt(5, param.c_doctype_id);
 				ps.setInt(6, param.ad_tab_id);
 				ps.setString(7, isCalledFromProcess ? "Y" : "N");
+				ps.setInt(8, printoption_id);
 				
 				rs = ps.executeQuery();
 				while (rs.next()) {
+					//TODO: is this still necessary?
 					if (rs.getInt("sbsp_printoption_id") != printoption_id
 							&& rs.getInt("sbsp_printoption_id") != 0)
 						continue;

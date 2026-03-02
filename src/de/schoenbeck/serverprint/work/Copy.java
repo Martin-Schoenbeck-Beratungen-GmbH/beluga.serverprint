@@ -72,7 +72,9 @@ public class Copy {
 		 + "             ? ad_user_id,"
 		 + "             cast (? as numeric) c_doctype_id,"
 		 + "             cast (? as numeric) ad_tab_id,"
-		 + "			 ? calledfromprocess),"
+		 + "			 ? calledfromprocess,"
+		 + "			 ? sbsp_printoption_id"
+		 + "),"
 		 /* subquery subprofiles looks up a list of applicable subprofiles for each present copytype
 		  * this subprofiles are then sorted by priority and those with both a tab and a doctype first,
 		  * then those with only a doctype and then those with only a tab. Only the first of them is
@@ -135,7 +137,8 @@ public class Copy {
 		 + "			or exists (select 1 from sbsp_printoption po "
 		 + "						WHERE cp.sbsp_printoption_id = po.sbsp_printoption_id "
 		 + "						and (po.islimitedtoprocess = 'N' "
-		 + "							or po.islimitedtoprocess = params.calledfromprocess)"
+		 + "							or po.islimitedtoprocess = params.calledfromprocess "
+		 + "				or po.sbsp_printoption_id = params.sbsp_printoption_id) "
 		 + "						AND po.isactive = 'Y'))"
 		 + "      order by cp.sbsp_copytype_id, cp.reportvariant, cp.exportfilenamepattern";
 	
